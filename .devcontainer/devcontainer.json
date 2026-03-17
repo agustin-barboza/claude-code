@@ -1,5 +1,5 @@
 {
-  "name": "Claude Code Sandbox",
+  "name": "Research Sandbox",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
@@ -11,7 +11,8 @@
   },
   "runArgs": [
     "--cap-add=NET_ADMIN",
-    "--cap-add=NET_RAW"
+    "--cap-add=NET_RAW",
+    "--sysctl", "net.ipv6.conf.all.disable_ipv6=1"
   ],
   "customizations": {
     "vscode": {
@@ -19,7 +20,10 @@
         "anthropic.claude-code",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "REditorSupport.r",
+        "ms-python.python",
+        "James-Yu.latex-workshop"
       ],
       "settings": {
         "editor.formatOnSave": true,
@@ -43,7 +47,13 @@
   "remoteUser": "node",
   "mounts": [
     "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
-    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/Dropbox (Personal)/Research/Personal/Projects/union_busting,target=/projects/union_busting,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/Dropbox (Personal)/Research/Personal/Projects/templates-overleaf,target=/projects/templates-overleaf,type=bind,consistency=cached",
+    "source=research-renv-cache,target=/home/node/.cache/R/renv,type=volume",
+    "source=research-pip-cache,target=/home/node/.cache/pip,type=volume"
   ],
   "containerEnv": {
     "NODE_OPTIONS": "--max-old-space-size=4096",

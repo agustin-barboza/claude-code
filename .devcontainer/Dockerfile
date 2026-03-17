@@ -5,7 +5,7 @@ ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
 
-# Install basic development tools and iptables/ipset
+# Install basic development tools, iptables/ipset, and image utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \
   git \
@@ -25,6 +25,39 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  curl \
+  wget \
+  imagemagick \
+  poppler-utils \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install R
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  r-base \
+  r-base-dev \
+  libcurl4-openssl-dev \
+  libssl-dev \
+  libxml2-dev \
+  libfontconfig1-dev \
+  libharfbuzz-dev \
+  libfribidi-dev \
+  libfreetype6-dev \
+  libpng-dev \
+  libtiff5-dev \
+  libjpeg-dev \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Python
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  python3 \
+  python3-pip \
+  python3-venv \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install TeX Live
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  texlive-full \
+  latexmk \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ensure default node user has access to /usr/local/share
